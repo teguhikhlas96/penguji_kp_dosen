@@ -1,493 +1,691 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Distribusi Mahasiswa per Dosen</title>
+    <title>Plotting Penguji Sidang - Per Dosen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f5f7fa;
-            color: #2c3e50;
-            line-height: 1.6;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.5;
+            padding: 16px;
+            min-height: 100vh;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 1rem;
-        }
-        
-        .header {
-            text-align: center;
-            padding: 2rem 1rem;
             background: white;
-            margin-bottom: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
         }
         
-        .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
         }
         
-        .header p {
+        header .subtitle {
+            margin-top: 8px;
             font-size: 0.9rem;
-            color: #7f8c8d;
+            opacity: 0.9;
+        }
+        
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-container {
+            padding: 16px;
         }
         
         .search-box {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin: 16px;
+            padding: 0;
         }
         
-        .search-box input {
+        #searchInput {
             width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e0e6ed;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 0.95rem;
-            transition: border-color 0.3s;
+            transition: border-color 0.2s;
         }
         
-        .search-box input:focus {
+        #searchInput:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #2c3e50;
         }
         
-        .dosen-card {
-            background: white;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            overflow: hidden;
-            transition: box-shadow 0.3s;
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
-        .dosen-card:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .tabs::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 2px;
+        }
+        
+        .tab {
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+        
+        .tab:hover {
+            color: #2c3e50;
+        }
+        
+        .tab.active {
+            color: #2c3e50;
+            border-bottom-color: #2c3e50;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 16px;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
         
         .dosen-header {
-            padding: 1rem;
             background: #f8f9fa;
-            border-bottom: 1px solid #e0e6ed;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            border: 1px solid #e0e0e0;
         }
         
-        .dosen-name {
+        .dosen-header h2 {
+            font-size: 1.25rem;
             font-weight: 600;
-            font-size: 1rem;
+            margin-bottom: 8px;
             color: #2c3e50;
+        }
+        
+        .dosen-header p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 12px;
         }
         
         .dosen-stats {
             display: flex;
-            gap: 0.75rem;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-top: 0.5rem;
+            margin-top: 12px;
         }
         
-        .stat {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-        }
-        
-        .toggle-icon {
-            font-size: 1.2rem;
-            color: #95a5a6;
-            transition: transform 0.3s;
-        }
-        
-        .dosen-card.active .toggle-icon {
-            transform: rotate(180deg);
-        }
-        
-        .dosen-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .dosen-card.active .dosen-content {
-            max-height: 5000px;
-        }
-        
-        .mahasiswa-section {
-            padding: 1rem;
-        }
-        
-        .section-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #34495e;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #ecf0f1;
-        }
-        
-        .mahasiswa-item {
-            padding: 0.75rem;
-            border-left: 3px solid #3498db;
-            background: #f8f9fa;
-            margin-bottom: 0.75rem;
+        .stat-badge {
+            background: white;
+            padding: 6px 12px;
             border-radius: 4px;
-        }
-        
-        .mahasiswa-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .mahasiswa-nim {
             font-size: 0.85rem;
-            color: #7f8c8d;
-            font-family: monospace;
-            margin-bottom: 0.5rem;
+            border: 1px solid #e0e0e0;
+            color: #555;
         }
         
-        .mahasiswa-details {
+        .stat-badge i {
+            margin-right: 4px;
+        }
+        
+        .mahasiswa-list {
             display: grid;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            color: #5a6c7d;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
         }
         
-        .detail-row {
+        .mahasiswa-card {
+            background: white;
+            border-radius: 6px;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .mahasiswa-card:hover {
+            border-color: #2c3e50;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .mahasiswa-card h3 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+        
+        .card-detail {
+            margin: 10px 0;
             display: flex;
-            gap: 0.5rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         
-        .detail-label {
+        .card-label {
             font-weight: 500;
-            min-width: 120px;
+            min-width: 100px;
+            color: #666;
+            font-size: 0.9rem;
         }
         
-        .gender-male {
-            color: #3498db;
+        .gender-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            margin-right: 6px;
+            font-weight: bold;
+            font-size: 0.75rem;
         }
         
-        .gender-female {
-            color: #e91e63;
+        .male {
+            background: #4a90e2;
+            color: white;
+        }
+        
+        .female {
+            background: #e94b7c;
+            color: white;
+        }
+        
+        .penguji-tag {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin: 2px 4px 2px 0;
+            font-size: 0.85rem;
+            color: #555;
+            word-break: break-word;
+        }
+        
+        .penguji-utama {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .pembimbing-tag {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #666;
+            margin-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .footer p {
+            margin: 4px 0;
+            font-size: 0.9rem;
         }
         
         .empty-state {
             text-align: center;
-            padding: 2rem;
-            color: #95a5a6;
+            padding: 48px 20px;
+            color: #999;
+            font-size: 1rem;
         }
         
-        @media (min-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
+        .empty-state i {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .print-btn {
+            display: inline-block;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 12px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .print-btn:hover {
+            background: #34495e;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .mahasiswa-list {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
             }
             
-            .header p {
-                font-size: 1rem;
+            header {
+                padding: 20px 16px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                gap: 8px;
+            }
+            
+            header .subtitle {
+                font-size: 0.85rem;
+            }
+            
+            .tab-container {
+                padding: 12px;
+            }
+            
+            .search-box {
+                margin: 12px;
+            }
+            
+            .tabs {
+                gap: 2px;
+                margin-bottom: 12px;
+            }
+            
+            .tab {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .tab-content {
+                padding: 12px;
+            }
+            
+            .mahasiswa-list {
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
             
             .dosen-header {
-                padding: 1.5rem;
+                padding: 12px;
             }
             
-            .dosen-name {
+            .dosen-header h2 {
                 font-size: 1.1rem;
             }
             
-            .mahasiswa-details {
-                grid-template-columns: repeat(2, 1fr);
+            .dosen-stats {
+                gap: 8px;
+            }
+            
+            .stat-badge {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .card-label {
+                min-width: 90px;
+                font-size: 0.85rem;
+            }
+            
+            .mahasiswa-card {
+                padding: 12px;
+            }
+            
+            .mahasiswa-card h3 {
+                font-size: 1rem;
+            }
+            
+            .footer {
+                padding: 16px;
+            }
+            
+            .footer p {
+                font-size: 0.85rem;
             }
         }
         
         @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            
             .container {
-                padding: 0.5rem;
+                border-radius: 4px;
             }
             
-            .header {
-                padding: 1.5rem 1rem;
+            header {
+                padding: 16px 12px;
             }
             
-            .header h1 {
+            h1 {
                 font-size: 1.25rem;
-            }
-            
-            .dosen-stats {
                 flex-direction: column;
-                gap: 0.25rem;
             }
             
-            .stat {
+            .tab {
+                padding: 8px 10px;
                 font-size: 0.8rem;
             }
             
-            .detail-label {
-                min-width: 100px;
+            .card-detail {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .card-label {
+                min-width: auto;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .tabs {
+                display: none;
+            }
+            
+            .tab-content {
+                display: block !important;
+                page-break-inside: avoid;
+            }
+            
+            .search-box {
+                display: none;
+            }
+            
+            .footer {
+                page-break-inside: avoid;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Distribusi Mahasiswa per Dosen Penguji</h1>
-            <p>Klik untuk melihat detail mahasiswa setiap dosen</p>
-        </div>
+        <header>
+            <h1><i class="fas fa-users"></i> MAHASISWA PER DOSEN PENGUJI</h1>
+            <p class="subtitle">Klik tab dosen untuk melihat mahasiswa yang diuji beserta rekan pengujinya</p>
+        </header>
         
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Cari dosen atau mahasiswa...">
+            <input type="text" id="searchInput" placeholder="Cari mahasiswa atau dosen...">
         </div>
         
-        <div id="dosenList"></div>
+        <div class="tab-container">
+            <div class="tabs" id="dosenTabs">
+                <!-- Tabs akan diisi oleh JavaScript -->
+            </div>
+            
+            <div id="tabContents">
+                <!-- Konten tab akan diisi oleh JavaScript -->
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><i class="fas fa-sync-alt"></i> Data diupdate secara otomatis dengan algoritma distribusi merata</p>
+            <p>© 2023 Sistem Plotting Penguji Sidang - Universitas</p>
+            <a href="javascript:window.print()" class="print-btn"><i class="fas fa-print"></i> Cetak Laporan</a>
+        </div>
     </div>
     
     <script>
-        const dosenData = [
-            {
-                nama: "Agus Supriatman, S.T, M.Kom.",
-                stats: { total: 5, laki: 4, perempuan: 1 },
-                penguji1: [
-                    { nama: "Dzikri Muhamad Romadhoni", nim: "2203010015", gender: "Laki-laki", pembimbing: "Dede Syahrul Anwar", rekan: "Aso Sudiarjo" },
-                    { nama: "Sepia Ayu Permatasari", nim: "2203010334", gender: "Perempuan", pembimbing: "Yusuf Sumaryana", rekan: "Aso Sudiarjo" },
-                    { nama: "Fauzan Ardiansyah", nim: "2203010040", gender: "Laki-laki", pembimbing: "Rudi Hartono", rekan: "Aso Sudiarjo" },
-                    { nama: "Dhafin Ilyasa Athallah", nim: "2203010057", gender: "Laki-laki", pembimbing: "Evi Dewi Sri Mulyani", rekan: "Aso Sudiarjo" }
-                ],
-                penguji2: [
-                    { nama: "Riyan Media Febriana", nim: "220301005", gender: "Laki-laki", pembimbing: "Shinta Siti Sundari", rekan: "Teguh Ikhlas Ramadhan" }
-                ]
-            },
-            {
-                nama: "Aso Sudiarjo, S.Kom., M.Kom.",
-                stats: { total: 5, laki: 4, perempuan: 1 },
-                penguji1: [],
-                penguji2: [
-                    { nama: "Dzikri Muhamad Romadhoni", nim: "2203010015", gender: "Laki-laki", pembimbing: "Dede Syahrul Anwar", rekan: "Agus Supriatman" },
-                    { nama: "Sepia Ayu Permatasari", nim: "2203010334", gender: "Perempuan", pembimbing: "Yusuf Sumaryana", rekan: "Agus Supriatman" },
-                    { nama: "Fauzan Ardiansyah", nim: "2203010040", gender: "Laki-laki", pembimbing: "Rudi Hartono", rekan: "Agus Supriatman" },
-                    { nama: "Dhafin Ilyasa Athallah", nim: "2203010057", gender: "Laki-laki", pembimbing: "Evi Dewi Sri Mulyani", rekan: "Agus Supriatman" },
-                    { nama: "Ocep bambang satria", nim: "2203010030", gender: "Laki-laki", pembimbing: "Agus Supriatman", rekan: "Shinta Siti Sundari" }
-                ]
-            },
-            {
-                nama: "Cepi Rahmat Hidayat, S.Kom., M.Kom.",
-                stats: { total: 5, laki: 3, perempuan: 2 },
-                penguji1: [
-                    { nama: "Agus Ihsan", nim: "2203010091", gender: "Laki-laki", pembimbing: "Teguh Ikhlas Ramadhan", rekan: "Dede Syahrul Anwar" },
-                    { nama: "Bintang Pratama Putra", nim: "2203010075", gender: "Laki-laki", pembimbing: "Dede Syahrul Anwar", rekan: "Evi Dewi Sri Mulyani" },
-                    { nama: "Muhammad Ali Irfan Ukasah", nim: "2203010143", gender: "Laki-laki", pembimbing: "Teuku Mufizar", rekan: "Dede Syahrul Anwar" },
-                    { nama: "Dwi Fajar Sari Roma Dona", nim: "2203010083", gender: "Perempuan", pembimbing: "Aso Sudiarjo", rekan: "Dede Syahrul Anwar" },
-                    { nama: "Sofa Tajul Afifah", nim: "2203010082", gender: "Perempuan", pembimbing: "Ruuhwan", rekan: "Dede Syahrul Anwar" }
-                ],
-                penguji2: []
-            },
-            {
-                nama: "Dede Syahrul Anwar, S.Kom., M.Kom.",
-                stats: { total: 5, laki: 3, perempuan: 2 },
-                penguji1: [
-                    { nama: "Ryandi Maulana Hafid", nim: "2203010003", gender: "Laki-laki", pembimbing: "Shinta Siti Sundari", rekan: "Missi Hikmatyar" }
-                ],
-                penguji2: [
-                    { nama: "Agus Ihsan", nim: "2203010091", gender: "Laki-laki", pembimbing: "Teguh Ikhlas Ramadhan", rekan: "Cepi Rahmat Hidayat" },
-                    { nama: "Muhammad Ali Irfan Ukasah", nim: "2203010143", gender: "Laki-laki", pembimbing: "Teuku Mufizar", rekan: "Cepi Rahmat Hidayat" },
-                    { nama: "Dwi Fajar Sari Roma Dona", nim: "2203010083", gender: "Perempuan", pembimbing: "Aso Sudiarjo", rekan: "Cepi Rahmat Hidayat" },
-                    { nama: "Sofa Tajul Afifah", nim: "2203010082", gender: "Perempuan", pembimbing: "Ruuhwan", rekan: "Cepi Rahmat Hidayat" }
-                ]
-            },
-            {
-                nama: "Evi Dewi Sri Mulyani, S.Kom., M.Kom.",
-                stats: { total: 4, laki: 3, perempuan: 1 },
-                penguji1: [
-                    { nama: "AGI NURHIDAYAT", nim: "2203010089", gender: "Laki-laki", pembimbing: "Rudi Hartono", rekan: "Missi Hikmatyar" },
-                    { nama: "Ega Nurfadillah Almunawaroh", nim: "2203010055", gender: "Perempuan", pembimbing: "Rudi Hartono", rekan: "Missi Hikmatyar" },
-                    { nama: "Sendy Septyawan Rudi", nim: "2203010012", gender: "Laki-laki", pembimbing: "Missi Hikmatyar", rekan: "Rudi Hartono" }
-                ],
-                penguji2: [
-                    { nama: "Bintang Pratama Putra", nim: "2203010075", gender: "Laki-laki", pembimbing: "Dede Syahrul Anwar", rekan: "Cepi Rahmat Hidayat" }
-                ]
-            },
-            {
-                nama: "Missi Hikmatyar, S.Kom., M.Kom.",
-                stats: { total: 4, laki: 3, perempuan: 1 },
-                penguji1: [
-                    { nama: "Ginda Juniar", nim: "2103010060", gender: "Laki-laki", pembimbing: "Yusuf Sumaryana", rekan: "Ruuhwan" }
-                ],
-                penguji2: [
-                    { nama: "AGI NURHIDAYAT", nim: "2203010089", gender: "Laki-laki", pembimbing: "Rudi Hartono", rekan: "Evi Dewi Sri Mulyani" },
-                    { nama: "Ryandi Maulana Hafid", nim: "2203010003", gender: "Laki-laki", pembimbing: "Shinta Siti Sundari", rekan: "Dede Syahrul Anwar" },
-                    { nama: "Ega Nurfadillah Almunawaroh", nim: "2203010055", gender: "Perempuan", pembimbing: "Rudi Hartono", rekan: "Evi Dewi Sri Mulyani" }
-                ]
-            },
-            {
-                nama: "Rudi Hartono, ST., M.Kom.",
-                stats: { total: 4, laki: 3, perempuan: 1 },
-                penguji1: [
-                    { nama: "Selma Salsabila", nim: "2203010116", gender: "Perempuan", pembimbing: "Missi Hikmatyar", rekan: "Ruuhwan" },
-                    { nama: "Indra Sandy", nim: "2203010056", gender: "Laki-laki", pembimbing: "Yusuf Sumaryana", rekan: "Ruuhwan" },
-                    { nama: "ARI", nim: "2203010395", gender: "Laki-laki", pembimbing: "Ruuhwan", rekan: "Shinta Siti Sundari" }
-                ],
-                penguji2: [
-                    { nama: "Sendy Septyawan Rudi", nim: "2203010012", gender: "Laki-laki", pembimbing: "Missi Hikmatyar", rekan: "Evi Dewi Sri Mulyani" }
-                ]
-            },
-            {
-                nama: "Ruuhwan, ST., M.Kom.",
-                stats: { total: 4, laki: 3, perempuan: 1 },
-                penguji1: [
-                    { nama: "Wandi nurjaman", nim: "2203010494", gender: "Laki-laki", pembimbing: "Cepi Rahmat Hidayat", rekan: "Teguh Ikhlas Ramadhan" }
-                ],
-                penguji2: [
-                    { nama: "Selma Salsabila", nim: "2203010116", gender: "Perempuan", pembimbing: "Missi Hikmatyar", rekan: "Rudi Hartono" },
-                    { nama: "Indra Sandy", nim: "2203010056", gender: "Laki-laki", pembimbing: "Yusuf Sumaryana", rekan: "Rudi Hartono" },
-                    { nama: "Ginda Juniar", nim: "2103010060", gender: "Laki-laki", pembimbing: "Yusuf Sumaryana", rekan: "Missi Hikmatyar" }
-                ]
-            },
-            {
-                nama: "Shinta Siti Sundari, M.Kom.",
-                stats: { total: 4, laki: 3, perempuan: 1 },
-                penguji1: [
-                    { nama: "Syabila Fitria Garnada", nim: "2203010553", gender: "Perempuan", pembimbing: "Cepi Rahmat Hidayat", rekan: "Teguh Ikhlas Ramadhan" },
-                    { nama: "Mochamad Fauzan Diva Kusumah", nim: "2203010002", gender: "Laki-laki", pembimbing: "Teuku Mufizar", rekan: "Teguh Ikhlas Ramadhan" },
-                    { nama: "Ocep bambang satria", nim: "2203010030", gender: "Laki-laki", pembimbing: "Agus Supriatman", rekan: "Aso Sudiarjo" }
-                ],
-                penguji2: [
-                    { nama: "ARI", nim: "2203010395", gender: "Laki-laki", pembimbing: "Ruuhwan", rekan: "Rudi Hartono" }
-                ]
-            },
-            {
-                nama: "Teguh Ikhlas Ramadhan, M.Kom",
-                stats: { total: 4, laki: 3, perempuan: 1 },
-                penguji1: [
-                    { nama: "Riyan Media Febriana", nim: "220301005", gender: "Laki-laki", pembimbing: "Shinta Siti Sundari", rekan: "Agus Supriatman" }
-                ],
-                penguji2: [
-                    { nama: "Syabila Fitria Garnada", nim: "2203010553", gender: "Perempuan", pembimbing: "Cepi Rahmat Hidayat", rekan: "Shinta Siti Sundari" },
-                    { nama: "Mochamad Fauzan Diva Kusumah", nim: "2203010002", gender: "Laki-laki", pembimbing: "Teuku Mufizar", rekan: "Shinta Siti Sundari" },
-                    { nama: "Wandi nurjaman", nim: "2203010494", gender: "Laki-laki", pembimbing: "Cepi Rahmat Hidayat", rekan: "Ruuhwan" }
-                ]
-            },
-            {
-                nama: "Teuku Mufizar, S.Kom., M.kom.",
-                stats: { total: 4, laki: 3, perempuan: 1 },
-                penguji1: [
-                    { nama: "ILHAM RIZQI PRATAMA", nim: "2203010013", gender: "Laki-laki", pembimbing: "Ruuhwan", rekan: "Yusuf Sumaryana" },
-                    { nama: "Mohamad Asep Purqon Nul Hakim", nim: "2203010521", gender: "Laki-laki", pembimbing: "Teguh Ikhlas Ramadhan", rekan: "Yusuf Sumaryana" },
-                    { nama: "Agy Andhikal Hady", nim: "2203010514", gender: "Laki-laki", pembimbing: "Evi Dewi Sri Mulyani", rekan: "Yusuf Sumaryana" },
-                    { nama: "SONIA ARI MURTI", nim: "2203010139", gender: "Perempuan", pembimbing: "Teguh Ikhlas Ramadhan", rekan: "Yusuf Sumaryana" }
-                ],
-                penguji2: []
-            },
-            {
-                nama: "Yusuf Sumaryana, ST., M.Kom.",
-                stats: { total: 4, laki: 3, perempuan: 1 },
-                penguji1: [],
-                penguji2: [
-                    { nama: "ILHAM RIZQI PRATAMA", nim: "2203010013", gender: "Laki-laki", pembimbing: "Ruuhwan", rekan: "Teuku Mufizar" },
-                    { nama: "Mohamad Asep Purqon Nul Hakim", nim: "2203010521", gender: "Laki-laki", pembimbing: "Teguh Ikhlas Ramadhan", rekan: "Teuku Mufizar" },
-                    { nama: "Agy Andhikal Hady", nim: "2203010514", gender: "Laki-laki", pembimbing: "Evi Dewi Sri Mulyani", rekan: "Teuku Mufizar" },
-                    { nama: "SONIA ARI MURTI", nim: "2203010139", gender: "Perempuan", pembimbing: "Teguh Ikhlas Ramadhan", rekan: "Teuku Mufizar" }
-                ]
+        // Data dosen dan mahasiswa dari Python
+        const allDosen = ['Agus Supriatman, S.T, M.Kom..', 'Aso Sudiarjo, S.Kom., M.Kom..', 'Cepi Rahmat Hidayat, S.Kom., M.Kom..', 'Dede Syahrul Anwar, S.Kom., M.Kom..', 'Evi Dewi Sri Mulyani, S.Kom., M.Kom..', 'Missi Hikmatyar, S.Kom., M.Kom..', 'Rudi Hartono, ST., M.Kom..', 'Ruuhwan, ST., M.Kom..', 'Shinta Siti Sundari, M.Kom..', 'Teguh Ikhlas Ramadhan, M.Kom.', 'Teuku Mufizar, S.Kom., M.Kom..', 'Yusuf Sumaryana, ST., M.Kom..'];
+        const resultData = [{"NIM":2203010056,"Nama":"Indra Sandy","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 2":"Rudi Hartono, ST., M.Kom.."},{"NIM":2203010030,"Nama":"Ocep bambang satria","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Agus Supriatman, S.T, M.Kom..","Penguji 1":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010494,"Nama":"Wandi nurjaman","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010091,"Nama":"Agus Ihsan","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010116,"Nama":"Selma Salsabila","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Missi Hikmatyar, S.Kom., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Ruuhwan, ST., M.Kom.."},{"NIM":2203010015,"Nama":"Dzikri Muhamad Romadhoni","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2203010143,"Nama":"Muhammad Ali Irfan Ukasah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 1":"Rudi Hartono, ST., M.Kom..","Penguji 2":"Dede Syahrul Anwar, S.Kom., M.Kom.."},{"NIM":220301005,"Nama":"Riyan Media Febriana","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Shinta Siti Sundari, M.Kom..","Penguji 1":"Aso Sudiarjo, S.Kom., M.Kom..","Penguji 2":"Evi Dewi Sri Mulyani, S.Kom., M.Kom.."},{"NIM":2203010013,"Nama":"ILHAM RIZQI PRATAMA","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010040,"Nama":"Fauzan Ardiansyah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 2":"Cepi Rahmat Hidayat, S.Kom., M.Kom.."},{"NIM":2203010002,"Nama":"Mochamad Fauzan Diva Kusumah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010395,"Nama":"ARI","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Yusuf Sumaryana, ST., M.Kom..","Penguji 2":"Cepi Rahmat Hidayat, S.Kom., M.Kom.."},{"NIM":2203010003,"Nama":"Ryandi Maulana Hafid","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Shinta Siti Sundari, M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010075,"Nama":"Bintang Pratama Putra","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010514,"Nama":"Agy Andhikal Hady","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Shinta Siti Sundari, M.Kom.."},{"NIM":2203010089,"Nama":"AGI NURHIDAYAT","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010521,"Nama":"Mohamad Asep Purqon Nul Hakim","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2103010060,"Nama":"Ginda Juniar","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Rudi Hartono, ST., M.Kom..","Penguji 2":"Teuku Mufizar, S.Kom., M.Kom.."},{"NIM":2203010082,"Nama":"Sofa Tajul Afifah","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010334,"Nama":"Sepia Ayu Permatasari","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2203010139,"Nama":"SONIA ARI MURTI","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010083,"Nama":"Dwi Fajar Sari Roma Dona","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Aso Sudiarjo, S.Kom., M.Kom..","Penguji 1":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010055,"Nama":"Ega Nurfadillah Almunawaroh","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Agus Supriatman, S.T, M.Kom.."},{"NIM":2203010553,"Nama":"Syabila Fitria Garnada","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 1":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 2":"Rudi Hartono, ST., M.Kom.."},{"NIM":2203010012,"Nama":"Sendy Septyawan Rudi","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Missi Hikmatyar, S.Kom., M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Cepi Rahmat Hidayat, S.Kom., M.Kom.."},{"NIM":2203010057,"Nama":"Dhafin Ilyasa Athallah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 1":"Yusuf Sumaryana, ST., M.Kom..","Penguji 2":"Dede Syahrul Anwar, S.Kom., M.Kom.."}];
+        const seed = 42;
+        
+        // Fungsi untuk membuat tab
+        function createTabs() {
+            const tabsContainer = document.getElementById('dosenTabs');
+            const contentContainer = document.getElementById('tabContents');
+            
+            // Buat tab untuk setiap dosen
+            allDosen.forEach((dosen, index) => {
+                // Buat tab
+                const tab = document.createElement('div');
+                tab.className = 'tab' + (index === 0 ? ' active' : '');
+                tab.textContent = dosen;
+                tab.dataset.dosen = dosen;
+                
+                tab.addEventListener('click', function() {
+                    // Nonaktifkan semua tab
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    // Aktifkan tab yang diklik
+                    this.classList.add('active');
+                    // Tampilkan konten yang sesuai
+                    showDosenContent(this.dataset.dosen);
+                });
+                
+                tabsContainer.appendChild(tab);
+                
+                // Buat konten tab
+                const content = document.createElement('div');
+                content.className = 'tab-content' + (index === 0 ? ' active' : '');
+                content.id = 'content-' + dosen.replace(/\s+/g, '-');
+                contentContainer.appendChild(content);
+            });
+            
+            // Tampilkan konten dosen pertama
+            if (allDosen.length > 0) {
+                showDosenContent(allDosen[0]);
             }
-        ];
-
-        function renderMahasiswa(mhs) {
-            return `
-                <div class="mahasiswa-item">
-                    <div class="mahasiswa-name">${mhs.nama}</div>
-                    <div class="mahasiswa-nim">${mhs.nim}</div>
-                    <div class="mahasiswa-details">
-                        <div class="detail-row">
-                            <span class="detail-label">Kelamin:</span>
-                            <span class="${mhs.gender === 'Laki-laki' ? 'gender-male' : 'gender-female'}">${mhs.gender}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Pembimbing:</span>
-                            <span>${mhs.pembimbing}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Rekan Penguji:</span>
-                            <span>${mhs.rekan}</span>
-                        </div>
+        }
+        
+        // Fungsi untuk menampilkan konten dosen
+        function showDosenContent(dosenName) {
+            // Sembunyikan semua tab-content terlebih dahulu
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const contentId = 'content-' + dosenName.replace(/\s+/g, '-');
+            const contentDiv = document.getElementById(contentId);
+            
+            // Tampilkan tab-content yang dipilih
+            if (contentDiv) {
+                contentDiv.classList.add('active');
+            }
+            
+            // Filter mahasiswa yang diuji oleh dosen ini
+            const mahasiswaDosen = resultData.filter(mhs => 
+                mhs['Penguji 1'] === dosenName || mhs['Penguji 2'] === dosenName
+            );
+            
+            // Hitung statistik
+            const totalMahasiswa = mahasiswaDosen.length;
+            const asPenguji1 = mahasiswaDosen.filter(mhs => mhs['Penguji 1'] === dosenName).length;
+            const asPenguji2 = mahasiswaDosen.filter(mhs => mhs['Penguji 2'] === dosenName).length;
+            const lakiCount = mahasiswaDosen.filter(mhs => mhs['Jenis Kelamin'] === 'Laki-laki').length;
+            const perempuanCount = mahasiswaDosen.filter(mhs => mhs['Jenis Kelamin'] === 'Perempuan').length;
+            
+            // Buat konten HTML
+            let html = `
+                <div class="dosen-header">
+                    <div>
+                        <h2><i class="fas fa-user-tie"></i> ${dosenName}</h2>
+                        <p>Daftar mahasiswa yang diuji oleh dosen ini</p>
+                    </div>
+                    <div class="dosen-stats">
+                        <div class="stat-badge"><i class="fas fa-users"></i> Total: ${totalMahasiswa}</div>
+                        <div class="stat-badge"><i class="fas fa-user-check"></i> Sebagai Penguji 1: ${asPenguji1}</div>
+                        <div class="stat-badge"><i class="fas fa-user-check"></i> Sebagai Penguji 2: ${asPenguji2}</div>
+                        <div class="stat-badge"><i class="fas fa-male"></i> Laki-laki: ${lakiCount}</div>
+                        <div class="stat-badge"><i class="fas fa-female"></i> Perempuan: ${perempuanCount}</div>
                     </div>
                 </div>
             `;
-        }
-
-        function renderDosen(dosen) {
-            const penguji1Html = dosen.penguji1.length > 0 
-                ? `<div class="section-title">Penguji 1 (${dosen.penguji1.length} mahasiswa)</div>
-                   ${dosen.penguji1.map(renderMahasiswa).join('')}`
-                : '';
             
-            const penguji2Html = dosen.penguji2.length > 0
-                ? `<div class="section-title">Penguji 2 (${dosen.penguji2.length} mahasiswa)</div>
-                   ${dosen.penguji2.map(renderMahasiswa).join('')}`
-                : '';
-
-            return `
-                <div class="dosen-card">
-                    <div class="dosen-header">
-                        <div>
-                            <div class="dosen-name">${dosen.nama}</div>
-                            <div class="dosen-stats">
-                                <span class="stat">👥 Total: ${dosen.stats.total}</span>
-                                <span class="stat">👨 L: ${dosen.stats.laki}</span>
-                                <span class="stat">👩 P: ${dosen.stats.perempuan}</span>
+            if (mahasiswaDosen.length === 0) {
+                html += `
+                    <div class="empty-state">
+                        <i class="fas fa-user-slash" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <h3>Tidak ada mahasiswa yang diuji oleh dosen ini</h3>
+                        <p>Dosen ${dosenName} tidak bertugas sebagai penguji pada penugasan ini.</p>
+                    </div>
+                `;
+            } else {
+                html += `<div class="mahasiswa-list">`;
+                
+                mahasiswaDosen.forEach(mhs => {
+                    const genderIcon = mhs['Jenis Kelamin'] === 'Laki-laki' ? '♂' : '♀';
+                    const genderClass = mhs['Jenis Kelamin'] === 'Laki-laki' ? 'male' : 'female';
+                    const isPenguji1 = mhs['Penguji 1'] === dosenName;
+                    const rekanPenguji = isPenguji1 ? mhs['Penguji 2'] : mhs['Penguji 1'];
+                    
+                    html += `
+                        <div class="mahasiswa-card">
+                            <h3>${mhs['Nama']}</h3>
+                            <div class="card-detail">
+                                <span class="card-label">NIM:</span>
+                                <strong>${mhs['NIM']}</strong>
+                            </div>
+                            <div class="card-detail">
+                                <span class="card-label">Jenis Kelamin:</span>
+                                <span class="gender-icon ${genderClass}">${genderIcon}</span>
+                                ${mhs['Jenis Kelamin']}
+                            </div>
+                            <div class="card-detail">
+                                <span class="card-label">Pembimbing:</span>
+                                <span class="penguji-tag pembimbing-tag">${mhs['Dosen Pembimbing']}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="card-label">Status Penguji:</span>
+                                <span class="penguji-tag penguji-utama">${isPenguji1 ? 'Penguji 1' : 'Penguji 2'}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="card-label">Rekan Penguji:</span>
+                                <span class="penguji-tag">${rekanPenguji}</span>
                             </div>
                         </div>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="dosen-content">
-                        <div class="mahasiswa-section">
-                            ${penguji1Html}
-                            ${penguji2Html}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Render semua dosen
-        const dosenList = document.getElementById('dosenList');
-        dosenList.innerHTML = dosenData.map(renderDosen).join('');
-
-        // Toggle accordion
-        document.querySelectorAll('.dosen-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const card = header.parentElement;
-                card.classList.toggle('active');
-            });
-        });
-        
-        // Search functionality
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('.dosen-card');
+                    `;
+                });
+                
+                html += `</div>`;
+            }
             
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+            contentDiv.innerHTML = html;
+        }
+        
+        // Fungsi pencarian
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                // Cari di semua tab
+                allDosen.forEach(dosen => {
+                    const contentId = 'content-' + dosen.replace(/\s+/g, '-');
+                    const contentDiv = document.getElementById(contentId);
+                    
+                    if (contentDiv) {
+                        const cards = contentDiv.querySelectorAll('.mahasiswa-card');
+                        let hasVisibleCards = false;
+                        
+                        cards.forEach(card => {
+                            const cardText = card.textContent.toLowerCase();
+                            const isVisible = cardText.includes(searchTerm);
+                            card.style.display = isVisible ? 'block' : 'none';
+                            if (isVisible) hasVisibleCards = true;
+                        });
+                        
+                        // Tampilkan pesan jika tidak ada hasil
+                        const emptyState = contentDiv.querySelector('.empty-state');
+                        if (!hasVisibleCards && cards.length > 0) {
+                            if (!emptyState) {
+                                const noResults = document.createElement('div');
+                                noResults.className = 'empty-state';
+                                noResults.innerHTML = `
+                                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                    <h3>Tidak ditemukan hasil untuk "${searchTerm}"</h3>
+                                    <p>Coba dengan kata kunci yang berbeda</p>
+                                `;
+                                contentDiv.appendChild(noResults);
+                            }
+                        } else if (emptyState) {
+                            emptyState.remove();
+                        }
+                    }
+                });
+            });
+        }
+        
+        // Inisialisasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            createTabs();
+            setupSearch();
+            
+            // Tambahkan event listener untuk pencetakan
+            document.querySelectorAll('.print-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    window.print();
+                });
             });
         });
     </script>
 </body>
 </html>
+
