@@ -11,14 +11,14 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: #333;
-            line-height: 1.5;
-            padding: 16px;
+            line-height: 1.6;
+            padding: 20px;
             min-height: 100vh;
         }
         
@@ -26,103 +26,78 @@
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             overflow: hidden;
         }
         
         header {
-            background: #2c3e50;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
             color: white;
-            padding: 24px 20px;
+            padding: 25px;
             text-align: center;
-        }
-        
-        header .subtitle {
-            margin-top: 8px;
-            font-size: 0.9rem;
-            opacity: 0.9;
+            border-bottom: 5px solid #3498db;
         }
         
         h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 i {
+            color: #3498db;
         }
         
         .tab-container {
-            padding: 16px;
-        }
-        
-        .search-box {
-            margin: 16px;
-            padding: 0;
-        }
-        
-        #searchInput {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            transition: border-color 0.2s;
-        }
-        
-        #searchInput:focus {
-            outline: none;
-            border-color: #2c3e50;
+            padding: 20px;
         }
         
         .tabs {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
-            border-bottom: 1px solid #e0e0e0;
-            margin-bottom: 16px;
+            border-bottom: 2px solid #3498db;
+            margin-bottom: 20px;
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .tabs::-webkit-scrollbar {
-            height: 4px;
-        }
-        
-        .tabs::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 2px;
         }
         
         .tab {
-            padding: 10px 16px;
-            background: transparent;
-            border: none;
+            padding: 12px 24px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-bottom: none;
             cursor: pointer;
             font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            margin-right: 5px;
+            border-radius: 8px 8px 0 0;
             white-space: nowrap;
-            color: #666;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
         }
         
         .tab:hover {
-            color: #2c3e50;
+            background: #e3f2fd;
         }
         
         .tab.active {
-            color: #2c3e50;
-            border-bottom-color: #2c3e50;
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
         }
         
         .tab-content {
             display: none;
-            padding: 16px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 0 0 10px 10px;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .tab-content.active {
@@ -130,120 +105,98 @@
         }
         
         .dosen-header {
-            background: #f8f9fa;
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .dosen-header h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-        
-        .dosen-header p {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 12px;
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
         
         .dosen-stats {
             display: flex;
-            gap: 12px;
+            gap: 20px;
             flex-wrap: wrap;
-            margin-top: 12px;
         }
         
         .stat-badge {
-            background: white;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            border: 1px solid #e0e0e0;
-            color: #555;
-        }
-        
-        .stat-badge i {
-            margin-right: 4px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
         }
         
         .mahasiswa-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
         }
         
         .mahasiswa-card {
             background: white;
-            border-radius: 6px;
-            padding: 16px;
-            border: 1px solid #e0e0e0;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s;
         }
         
         .mahasiswa-card:hover {
-            border-color: #2c3e50;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
         .mahasiswa-card h3 {
             color: #2c3e50;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #f0f0f0;
             padding-bottom: 8px;
         }
         
         .card-detail {
-            margin: 10px 0;
+            margin: 8px 0;
             display: flex;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 8px;
+            align-items: center;
         }
         
         .card-label {
-            font-weight: 500;
-            min-width: 100px;
-            color: #666;
-            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 120px;
+            color: #7f8c8d;
         }
         
         .gender-icon {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             text-align: center;
-            line-height: 20px;
-            margin-right: 6px;
+            line-height: 22px;
+            margin-right: 8px;
             font-weight: bold;
-            font-size: 0.75rem;
         }
         
         .male {
-            background: #4a90e2;
+            background: #3498db;
             color: white;
         }
         
         .female {
-            background: #e94b7c;
+            background: #e84393;
             color: white;
         }
         
         .penguji-tag {
             display: inline-block;
-            background: #f0f0f0;
-            padding: 4px 10px;
-            border-radius: 4px;
-            margin: 2px 4px 2px 0;
+            background: #e3f2fd;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin: 2px;
             font-size: 0.85rem;
-            color: #555;
-            word-break: break-word;
         }
         
         .penguji-utama {
@@ -252,214 +205,86 @@
         }
         
         .pembimbing-tag {
-            background: #fff3cd;
+            background: #ffeaa7;
             color: #856404;
         }
         
         .footer {
             text-align: center;
             padding: 20px;
-            background: #f8f9fa;
-            color: #666;
-            margin-top: 16px;
-            border-top: 1px solid #e0e0e0;
+            background: #2c3e50;
+            color: white;
+            margin-top: 20px;
+            border-top: 5px solid #3498db;
         }
         
-        .footer p {
-            margin: 4px 0;
-            font-size: 0.9rem;
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                margin-bottom: 5px;
+                border-radius: 8px;
+                text-align: center;
+            }
+            
+            .mahasiswa-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .dosen-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        .search-box {
+            margin: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            font-size: 1rem;
         }
         
         .empty-state {
             text-align: center;
-            padding: 48px 20px;
-            color: #999;
-            font-size: 1rem;
-        }
-        
-        .empty-state i {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
-        
-        .empty-state h3 {
-            margin-bottom: 8px;
-            color: #666;
+            padding: 40px;
+            color: #7f8c8d;
             font-size: 1.1rem;
         }
         
         .print-btn {
             display: inline-block;
-            background: #2c3e50;
+            background: #3498db;
             color: white;
             padding: 10px 20px;
-            border-radius: 6px;
+            border-radius: 5px;
             text-decoration: none;
-            margin-top: 12px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-            border: none;
-            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: background 0.3s;
         }
         
         .print-btn:hover {
-            background: #34495e;
+            background: #2980b9;
         }
         
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .mahasiswa-list {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 12px;
-            }
-            
-            header {
-                padding: 20px 16px;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
-                gap: 8px;
-            }
-            
-            header .subtitle {
-                font-size: 0.85rem;
-            }
-            
-            .tab-container {
-                padding: 12px;
-            }
-            
-            .search-box {
-                margin: 12px;
-            }
-            
-            .tabs {
-                gap: 2px;
-                margin-bottom: 12px;
-            }
-            
-            .tab {
-                padding: 8px 12px;
-                font-size: 0.85rem;
-            }
-            
-            .tab-content {
-                padding: 12px;
-            }
-            
-            .mahasiswa-list {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
-            .dosen-header {
-                padding: 12px;
-            }
-            
-            .dosen-header h2 {
-                font-size: 1.1rem;
-            }
-            
-            .dosen-stats {
-                gap: 8px;
-            }
-            
-            .stat-badge {
-                padding: 5px 10px;
-                font-size: 0.8rem;
-            }
-            
-            .card-label {
-                min-width: 90px;
-                font-size: 0.85rem;
-            }
-            
-            .mahasiswa-card {
-                padding: 12px;
-            }
-            
-            .mahasiswa-card h3 {
-                font-size: 1rem;
-            }
-            
-            .footer {
-                padding: 16px;
-            }
-            
-            .footer p {
-                font-size: 0.85rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 8px;
-            }
-            
-            .container {
-                border-radius: 4px;
-            }
-            
-            header {
-                padding: 16px 12px;
-            }
-            
-            h1 {
-                font-size: 1.25rem;
-                flex-direction: column;
-            }
-            
-            .tab {
-                padding: 8px 10px;
-                font-size: 0.8rem;
-            }
-            
-            .card-detail {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-            
-            .card-label {
-                min-width: auto;
-            }
-        }
-        
-        /* Print Styles */
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            
-            .container {
-                box-shadow: none;
-            }
-            
-            .tabs {
-                display: none;
-            }
-            
-            .tab-content {
-                display: block !important;
-                page-break-inside: avoid;
-            }
-            
-            .search-box {
-                display: none;
-            }
-            
-            .footer {
-                page-break-inside: avoid;
-            }
+        .tab-content-container {
+            max-height: 600px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -479,7 +304,7 @@
                 <!-- Tabs akan diisi oleh JavaScript -->
             </div>
             
-            <div id="tabContents">
+            <div class="tab-content-container" id="tabContents">
                 <!-- Konten tab akan diisi oleh JavaScript -->
             </div>
         </div>
@@ -493,62 +318,77 @@
     
     <script>
         // Data dosen dan mahasiswa dari Python
-        const allDosen = ['Agus Supriatman, S.T, M.Kom..', 'Aso Sudiarjo, S.Kom., M.Kom..', 'Cepi Rahmat Hidayat, S.Kom., M.Kom..', 'Dede Syahrul Anwar, S.Kom., M.Kom..', 'Evi Dewi Sri Mulyani, S.Kom., M.Kom..', 'Missi Hikmatyar, S.Kom., M.Kom..', 'Rudi Hartono, ST., M.Kom..', 'Ruuhwan, ST., M.Kom..', 'Shinta Siti Sundari, M.Kom..', 'Teguh Ikhlas Ramadhan, M.Kom.', 'Teuku Mufizar, S.Kom., M.Kom..', 'Yusuf Sumaryana, ST., M.Kom..'];
-        const resultData = [{"NIM":2203010056,"Nama":"Indra Sandy","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 2":"Rudi Hartono, ST., M.Kom.."},{"NIM":2203010030,"Nama":"Ocep bambang satria","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Agus Supriatman, S.T, M.Kom..","Penguji 1":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010494,"Nama":"Wandi nurjaman","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010091,"Nama":"Agus Ihsan","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010116,"Nama":"Selma Salsabila","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Missi Hikmatyar, S.Kom., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Ruuhwan, ST., M.Kom.."},{"NIM":2203010015,"Nama":"Dzikri Muhamad Romadhoni","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2203010143,"Nama":"Muhammad Ali Irfan Ukasah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 1":"Rudi Hartono, ST., M.Kom..","Penguji 2":"Dede Syahrul Anwar, S.Kom., M.Kom.."},{"NIM":220301005,"Nama":"Riyan Media Febriana","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Shinta Siti Sundari, M.Kom..","Penguji 1":"Aso Sudiarjo, S.Kom., M.Kom..","Penguji 2":"Evi Dewi Sri Mulyani, S.Kom., M.Kom.."},{"NIM":2203010013,"Nama":"ILHAM RIZQI PRATAMA","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010040,"Nama":"Fauzan Ardiansyah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 2":"Cepi Rahmat Hidayat, S.Kom., M.Kom.."},{"NIM":2203010002,"Nama":"Mochamad Fauzan Diva Kusumah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010395,"Nama":"ARI","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Yusuf Sumaryana, ST., M.Kom..","Penguji 2":"Cepi Rahmat Hidayat, S.Kom., M.Kom.."},{"NIM":2203010003,"Nama":"Ryandi Maulana Hafid","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Shinta Siti Sundari, M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010075,"Nama":"Bintang Pratama Putra","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010514,"Nama":"Agy Andhikal Hady","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Shinta Siti Sundari, M.Kom.."},{"NIM":2203010089,"Nama":"AGI NURHIDAYAT","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010521,"Nama":"Mohamad Asep Purqon Nul Hakim","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2103010060,"Nama":"Ginda Juniar","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Rudi Hartono, ST., M.Kom..","Penguji 2":"Teuku Mufizar, S.Kom., M.Kom.."},{"NIM":2203010082,"Nama":"Sofa Tajul Afifah","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010334,"Nama":"Sepia Ayu Permatasari","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2203010139,"Nama":"SONIA ARI MURTI","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010083,"Nama":"Dwi Fajar Sari Roma Dona","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Aso Sudiarjo, S.Kom., M.Kom..","Penguji 1":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010055,"Nama":"Ega Nurfadillah Almunawaroh","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Agus Supriatman, S.T, M.Kom.."},{"NIM":2203010553,"Nama":"Syabila Fitria Garnada","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 1":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 2":"Rudi Hartono, ST., M.Kom.."},{"NIM":2203010012,"Nama":"Sendy Septyawan Rudi","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Missi Hikmatyar, S.Kom., M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Cepi Rahmat Hidayat, S.Kom., M.Kom.."},{"NIM":2203010057,"Nama":"Dhafin Ilyasa Athallah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 1":"Yusuf Sumaryana, ST., M.Kom..","Penguji 2":"Dede Syahrul Anwar, S.Kom., M.Kom.."}];
+        const allDosen = ["Agus Supriatman, S.T, M.Kom..", "Aso Sudiarjo, S.Kom., M.Kom..", "Cepi Rahmat Hidayat, S.Kom., M.Kom..", "Dede Syahrul Anwar, S.Kom., M.Kom..", "Evi Dewi Sri Mulyani, S.Kom., M.Kom..", "Missi Hikmatyar, S.Kom., M.Kom..", "Rudi Hartono, ST., M.Kom..", "Ruuhwan, ST., M.Kom..", "Shinta Siti Sundari, M.Kom..", "Teguh Ikhlas Ramadhan, M.Kom.", "Teuku Mufizar, S.Kom., M.Kom..", "Yusuf Sumaryana, ST., M.Kom.."];
+        const resultData = [{"NIM":2203010089,"Nama":"AGI NURHIDAYAT","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Ruuhwan, ST., M.Kom.."},{"NIM":2203010087,"Nama":"Muhamad Zaky Gustiar","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 1":"Missi Hikmatyar, S.Kom., M.Kom..","Penguji 2":"Shinta Siti Sundari, M.Kom.."},{"NIM":2203010075,"Nama":"Bintang Pratama Putra","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Evi Dewi Sri Mulyani, S.Kom., M.Kom.."},{"NIM":2203010056,"Nama":"Indra Sandy","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2203010032,"Nama":"Sakha wijdan Wiguna","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 1":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 2":"Teuku Mufizar, S.Kom., M.Kom.."},{"NIM":2203010084,"Nama":"Rifansyah Iqramullah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Shinta Siti Sundari, M.Kom..","Penguji 1":"Rudi Hartono, ST., M.Kom..","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010057,"Nama":"Dhafin Ilyasa Athallah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 1":"Rudi Hartono, ST., M.Kom..","Penguji 2":"Agus Supriatman, S.T, M.Kom.."},{"NIM":2203010013,"Nama":"ILHAM RIZQI PRATAMA","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010077,"Nama":"Husain Muhammad Nur","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Shinta Siti Sundari, M.Kom..","Penguji 1":"Ruuhwan, ST., M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2203010082,"Nama":"Sofa Tajul Afifah","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010037,"Nama":"Yasril Awalludin","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Dede Syahrul Anwar, S.Kom., M.Kom.."},{"NIM":2203010116,"Nama":"Selma Salsabila","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Missi Hikmatyar, S.Kom., M.Kom..","Penguji 1":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010083,"Nama":"Dwi Fajar Sari Roma Dona","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Aso Sudiarjo, S.Kom., M.Kom..","Penguji 1":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010143,"Nama":"Muhammad Ali Irfan Ukasah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Evi Dewi Sri Mulyani, S.Kom., M.Kom.."},{"NIM":2203010494,"Nama":"Wandi nurjaman","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 1":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 2":"Rudi Hartono, ST., M.Kom.."},{"NIM":2203010334,"Nama":"Sepia Ayu Permatasari","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010015,"Nama":"Dzikri Muhamad Romadhoni","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Dede Syahrul Anwar, S.Kom., M.Kom..","Penguji 1":"Aso Sudiarjo, S.Kom., M.Kom..","Penguji 2":"Teuku Mufizar, S.Kom., M.Kom.."},{"NIM":2103010060,"Nama":"Ginda Juniar","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Yusuf Sumaryana, ST., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Ruuhwan, ST., M.Kom.."},{"NIM":2203010012,"Nama":"Sendy Septyawan Rudi","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Missi Hikmatyar, S.Kom., M.Kom..","Penguji 1":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 2":"Teguh Ikhlas Ramadhan, M.Kom."},{"NIM":2203010521,"Nama":"Mohamad Asep Purqon Nul Hakim","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Yusuf Sumaryana, ST., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010003,"Nama":"Ryandi Maulana Hafid","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Shinta Siti Sundari, M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Dede Syahrul Anwar, S.Kom., M.Kom.."},{"NIM":2203010514,"Nama":"Agy Andhikal Hady","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Evi Dewi Sri Mulyani, S.Kom., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Teuku Mufizar, S.Kom., M.Kom.."},{"NIM":2203010395,"Nama":"ARI","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Ruuhwan, ST., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Rudi Hartono, ST., M.Kom.."},{"NIM":2203010553,"Nama":"Syabila Fitria Garnada","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 1":"Aso Sudiarjo, S.Kom., M.Kom..","Penguji 2":"Ruuhwan, ST., M.Kom.."},{"NIM":2203010091,"Nama":"Agus Ihsan","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Yusuf Sumaryana, ST., M.Kom..","Penguji 2":"Missi Hikmatyar, S.Kom., M.Kom.."},{"NIM":2203010030,"Nama":"Ocep bambang satria","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Agus Supriatman, S.T, M.Kom..","Penguji 1":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 2":"Ruuhwan, ST., M.Kom.."},{"NIM":220301005,"Nama":"Riyan Media Febriana","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Shinta Siti Sundari, M.Kom..","Penguji 1":"Agus Supriatman, S.T, M.Kom..","Penguji 2":"Aso Sudiarjo, S.Kom., M.Kom.."},{"NIM":2203010002,"Nama":"Mochamad Fauzan Diva Kusumah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Teuku Mufizar, S.Kom., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Evi Dewi Sri Mulyani, S.Kom., M.Kom.."},{"NIM":2203010139,"Nama":"SONIA ARI MURTI","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 1":"Rudi Hartono, ST., M.Kom..","Penguji 2":"Dede Syahrul Anwar, S.Kom., M.Kom.."},{"NIM":2203010055,"Nama":"Ega Nurfadillah Almunawaroh","Jenis Kelamin":"Perempuan","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Cepi Rahmat Hidayat, S.Kom., M.Kom..","Penguji 2":"Teuku Mufizar, S.Kom., M.Kom.."},{"NIM":2203010074,"Nama":"REGA RAHMAT ALGIFARY","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Missi Hikmatyar, S.Kom., M.Kom..","Penguji 1":"Teguh Ikhlas Ramadhan, M.Kom.","Penguji 2":"Yusuf Sumaryana, ST., M.Kom.."},{"NIM":2203010040,"Nama":"Fauzan Ardiansyah","Jenis Kelamin":"Laki-laki","Dosen Pembimbing":"Rudi Hartono, ST., M.Kom..","Penguji 1":"Shinta Siti Sundari, M.Kom..","Penguji 2":"Teuku Mufizar, S.Kom., M.Kom.."}];
         const seed = 42;
         
-        // Fungsi untuk membuat tab
-        function createTabs() {
+        // Fungsi untuk menginisialisasi tab
+        function initTabs() {
             const tabsContainer = document.getElementById('dosenTabs');
             const contentContainer = document.getElementById('tabContents');
             
+            // Clear existing content
+            tabsContainer.innerHTML = '';
+            contentContainer.innerHTML = '';
+            
             // Buat tab untuk setiap dosen
             allDosen.forEach((dosen, index) => {
-                // Buat tab
-                const tab = document.createElement('div');
-                tab.className = 'tab' + (index === 0 ? ' active' : '');
-                tab.textContent = dosen;
-                tab.dataset.dosen = dosen;
+                // Buat elemen tab
+                const tabButton = document.createElement('button');
+                tabButton.className = 'tab';
+                tabButton.textContent = dosen;
+                tabButton.setAttribute('data-dosen-index', index);
                 
-                tab.addEventListener('click', function() {
-                    // Nonaktifkan semua tab
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    // Aktifkan tab yang diklik
+                // Tambahkan event listener
+                tabButton.addEventListener('click', function() {
+                    // Hapus class active dari semua tab
+                    document.querySelectorAll('.tab').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    
+                    // Tambahkan class active ke tab yang diklik
                     this.classList.add('active');
-                    // Tampilkan konten yang sesuai
-                    showDosenContent(this.dataset.dosen);
+                    
+                    // Sembunyikan semua konten tab
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Tampilkan konten tab yang sesuai
+                    const contentId = 'content-' + index;
+                    const activeContent = document.getElementById(contentId);
+                    if (activeContent) {
+                        activeContent.classList.add('active');
+                    }
                 });
                 
-                tabsContainer.appendChild(tab);
+                tabsContainer.appendChild(tabButton);
                 
                 // Buat konten tab
-                const content = document.createElement('div');
-                content.className = 'tab-content' + (index === 0 ? ' active' : '');
-                content.id = 'content-' + dosen.replace(/\s+/g, '-');
-                contentContainer.appendChild(content);
+                const tabContent = document.createElement('div');
+                tabContent.className = 'tab-content';
+                tabContent.id = 'content-' + index;
+                
+                // Isi konten tab
+                fillTabContent(tabContent, dosen, index);
+                
+                contentContainer.appendChild(tabContent);
             });
             
-            // Tampilkan konten dosen pertama
+            // Aktifkan tab pertama jika ada
             if (allDosen.length > 0) {
-                showDosenContent(allDosen[0]);
+                const firstTab = tabsContainer.querySelector('.tab');
+                const firstContent = document.getElementById('content-0');
+                
+                if (firstTab && firstContent) {
+                    firstTab.classList.add('active');
+                    firstContent.classList.add('active');
+                }
             }
         }
         
-        // Fungsi untuk menampilkan konten dosen
-        function showDosenContent(dosenName) {
-            // Sembunyikan semua tab-content terlebih dahulu
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            const contentId = 'content-' + dosenName.replace(/\s+/g, '-');
-            const contentDiv = document.getElementById(contentId);
-            
-            // Tampilkan tab-content yang dipilih
-            if (contentDiv) {
-                contentDiv.classList.add('active');
-            }
-            
+        // Fungsi untuk mengisi konten tab
+        function fillTabContent(container, dosenName, index) {
             // Filter mahasiswa yang diuji oleh dosen ini
             const mahasiswaDosen = resultData.filter(mhs => 
                 mhs['Penguji 1'] === dosenName || mhs['Penguji 2'] === dosenName
@@ -570,9 +410,9 @@
                     </div>
                     <div class="dosen-stats">
                         <div class="stat-badge"><i class="fas fa-users"></i> Total: ${totalMahasiswa}</div>
-                        <div class="stat-badge"><i class="fas fa-user-check"></i> Sebagai Penguji 1: ${asPenguji1}</div>
-                        <div class="stat-badge"><i class="fas fa-user-check"></i> Sebagai Penguji 2: ${asPenguji2}</div>
-                        <div class="stat-badge"><i class="fas fa-male"></i> Laki-laki: ${lakiCount}</div>
+                        <div class="stat-badge"><i class="fas fa-user-check"></i> Penguji 1: ${asPenguji1}</div>
+                        <div class="stat-badge"><i class="fas fa-user-check"></i> Penguji 2: ${asPenguji2}</div>
+                        <div class="stat-badge"><i class="fas fa-male"></i> Laki: ${lakiCount}</div>
                         <div class="stat-badge"><i class="fas fa-female"></i> Perempuan: ${perempuanCount}</div>
                     </div>
                 </div>
@@ -587,16 +427,16 @@
                     </div>
                 `;
             } else {
-                html += `<div class="mahasiswa-list">`;
+                html += `<div class="mahasiswa-list" id="mahasiswa-list-${index}">`;
                 
-                mahasiswaDosen.forEach(mhs => {
+                mahasiswaDosen.forEach((mhs, mhsIndex) => {
                     const genderIcon = mhs['Jenis Kelamin'] === 'Laki-laki' ? '♂' : '♀';
                     const genderClass = mhs['Jenis Kelamin'] === 'Laki-laki' ? 'male' : 'female';
                     const isPenguji1 = mhs['Penguji 1'] === dosenName;
                     const rekanPenguji = isPenguji1 ? mhs['Penguji 2'] : mhs['Penguji 1'];
                     
                     html += `
-                        <div class="mahasiswa-card">
+                        <div class="mahasiswa-card" data-mahasiswa-index="${mhsIndex}">
                             <h3>${mhs['Nama']}</h3>
                             <div class="card-detail">
                                 <span class="card-label">NIM:</span>
@@ -626,44 +466,48 @@
                 html += `</div>`;
             }
             
-            contentDiv.innerHTML = html;
+            container.innerHTML = html;
         }
         
-        // Fungsi pencarian
+        // Fungsi untuk setup pencarian
         function setupSearch() {
             const searchInput = document.getElementById('searchInput');
             
             searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
+                const searchTerm = this.value.toLowerCase().trim();
                 
-                // Cari di semua tab
-                allDosen.forEach(dosen => {
-                    const contentId = 'content-' + dosen.replace(/\s+/g, '-');
-                    const contentDiv = document.getElementById(contentId);
+                // Cari di semua konten tab
+                document.querySelectorAll('.tab-content').forEach((tabContent, tabIndex) => {
+                    const mahasiswaCards = tabContent.querySelectorAll('.mahasiswa-card');
+                    let hasVisibleCards = false;
                     
-                    if (contentDiv) {
-                        const cards = contentDiv.querySelectorAll('.mahasiswa-card');
-                        let hasVisibleCards = false;
+                    mahasiswaCards.forEach(card => {
+                        const cardText = card.textContent.toLowerCase();
+                        const isVisible = searchTerm === '' || cardText.includes(searchTerm);
+                        card.style.display = isVisible ? 'block' : 'none';
+                        if (isVisible) hasVisibleCards = true;
+                    });
+                    
+                    // Tampilkan pesan jika tidak ada hasil di tab ini
+                    const mahasiswaList = tabContent.querySelector('.mahasiswa-list');
+                    if (mahasiswaList) {
+                        let emptyState = mahasiswaList.nextElementSibling;
                         
-                        cards.forEach(card => {
-                            const cardText = card.textContent.toLowerCase();
-                            const isVisible = cardText.includes(searchTerm);
-                            card.style.display = isVisible ? 'block' : 'none';
-                            if (isVisible) hasVisibleCards = true;
-                        });
+                        // Periksa jika ada empty state yang sudah ada
+                        if (!emptyState || !emptyState.classList.contains('empty-state')) {
+                            emptyState = null;
+                        }
                         
-                        // Tampilkan pesan jika tidak ada hasil
-                        const emptyState = contentDiv.querySelector('.empty-state');
-                        if (!hasVisibleCards && cards.length > 0) {
+                        if (!hasVisibleCards && mahasiswaCards.length > 0) {
                             if (!emptyState) {
                                 const noResults = document.createElement('div');
                                 noResults.className = 'empty-state';
                                 noResults.innerHTML = `
-                                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                                    <h3>Tidak ditemukan hasil untuk "${searchTerm}"</h3>
+                                    <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                                    <h3>Tidak ditemukan hasil untuk "${searchInput.value}"</h3>
                                     <p>Coba dengan kata kunci yang berbeda</p>
                                 `;
-                                contentDiv.appendChild(noResults);
+                                mahasiswaList.parentNode.insertBefore(noResults, mahasiswaList.nextSibling);
                             }
                         } else if (emptyState) {
                             emptyState.remove();
@@ -675,7 +519,8 @@
         
         // Inisialisasi saat halaman dimuat
         document.addEventListener('DOMContentLoaded', function() {
-            createTabs();
+            console.log('DOM loaded, initializing tabs...');
+            initTabs();
             setupSearch();
             
             // Tambahkan event listener untuk pencetakan
@@ -685,7 +530,13 @@
                 });
             });
         });
+        
+        // Juga inisialisasi jika DOM sudah siap
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTabs);
+        } else {
+            initTabs();
+        }
     </script>
 </body>
 </html>
-
